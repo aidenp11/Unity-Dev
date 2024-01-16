@@ -18,7 +18,7 @@ public class PhysicsCharacterController : MonoBehaviour
     Vector3 force = Vector3.zero;
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+       // Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
     }
 
