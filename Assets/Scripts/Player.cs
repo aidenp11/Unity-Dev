@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [Header("Events")]
     [SerializeField] IntEvent scoreEvent = default;
     [SerializeField] VoidEvent gameStartEvent = default;
+    [SerializeField] VoidEvent playerDeadEvent = default;
 
     // Start is called before the first frame update
     private int score = 0;
@@ -43,5 +44,22 @@ public class Player : MonoBehaviour
     private void OnStartGame()
     {
         characterController.enabled = true;
+    }
+
+    public void Damage(float damage)
+    {
+        health.value -= damage;
+        if (health.value <= 0)
+        {
+            playerDeadEvent.RaiseEvent();
+        }
+    }
+
+    public void OnRespawn(GameObject respawn)
+    {
+        transform.position = respawn.transform.position;
+        transform.rotation = respawn.transform.rotation;
+
+        characterController.Reset();
     }
 }
