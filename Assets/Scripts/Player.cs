@@ -61,5 +61,6 @@ public class Player : MonoBehaviour
         transform.rotation = respawn.transform.rotation;
 
         characterController.Reset();
+        characterController.enabled = true;
     }
 }
