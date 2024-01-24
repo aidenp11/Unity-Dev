@@ -111,8 +111,11 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-
-        state = State.START_GAME;
+            foreach (var mushroom in mushrooms)
+            {
+                mushroom.SetActive(true);
+            }
+            state = State.START_GAME;
         }
     }
 
