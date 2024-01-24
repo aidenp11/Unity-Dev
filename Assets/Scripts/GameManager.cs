@@ -7,20 +7,17 @@ using UnityEngine.UI;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] GameObject titleUI;
-    [SerializeField] GameObject goUI;
     [SerializeField] TMP_Text livesUI;
     [SerializeField] TMP_Text timerUI;
     [SerializeField] Slider healthUI;
-
-    [SerializeField] List<GameObject> mushrooms;
 
     [SerializeField] GameObject respawn;
 
     [SerializeField] FloatVariable health;
     [Header("Events")]
-    // [SerializeField] IntEvent scoreEvent;
-    [SerializeField] VoidEvent gamestartEvent;
-    [SerializeField] GameObjectEvent respawnEvent;
+   // [SerializeField] IntEvent scoreEvent;
+    [SerializeField] VoidEvent gamestartEvent; 
+    [SerializeField] GameObjectEvent respawnEvent; 
 
 
     public enum State
@@ -41,17 +38,17 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        // scoreEvent.Subscribe(OnAddPoint);
+       // scoreEvent.Subscribe(OnAddPoint);
     }
 
     private void OnEnable()
     {
-        // scoreEvent.Subscribe(OnAddPoint);
+       // scoreEvent.Subscribe(OnAddPoint);
     }
 
     private void OnDisable()
     {
-        // scoreEvent.UnSubscribe(OnAddPoint);
+       // scoreEvent.UnSubscribe(OnAddPoint);
     }
 
     void Update()
@@ -62,26 +59,23 @@ public class GameManager : Singleton<GameManager>
                 titleUI.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
-                Lives = 3;
-                Timer = 60;
                 break;
             case State.START_GAME:
                 titleUI.SetActive(false);
+                Timer = 60;
+                Lives = 3;
                 health.value = 100;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
                 gamestartEvent.RaiseEvent();
-                state = State.PLAY_GAME;
                 respawnEvent.RaiseEvent(respawn);
+                state = State.PLAY_GAME;
                 break;
             case State.PLAY_GAME:
                 Timer = Timer - Time.deltaTime;
                 if (Timer < 0) state = State.GAME_OVER;
                 break;
             case State.GAME_OVER:
-                goUI.SetActive(true);
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
                 break;
         }
 
@@ -97,26 +91,7 @@ public class GameManager : Singleton<GameManager>
 
     public void OnPlayerDead()
     {
-        if (Lives <= 0)
-        {
-            state = State.GAME_OVER;
-        }
-        else
-        {
-            Lives -= 1;
-            state = State.START_GAME;
-        }
-    }
-
-    public void OnGameOver()
-    {
-        for (int i = 0; i < mushrooms.Count; i++)
-        {
-            mushrooms[i].SetActive(true);
-        }
-
-        goUI.SetActive(false);
-        state = State.TITLE;
+        state = State.START_GAME;
     }
 
     public void OnAddPoint(int points)
