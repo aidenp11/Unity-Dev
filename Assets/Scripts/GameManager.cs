@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] GameObject titleUI;
+    [SerializeField] GameObject goUI;
+    [SerializeField] GameObject gwUI;
     [SerializeField] TMP_Text livesUI;
     [SerializeField] TMP_Text timerUI;
     [SerializeField] Slider healthUI;
@@ -17,7 +19,9 @@ public class GameManager : Singleton<GameManager>
     [Header("Events")]
    // [SerializeField] IntEvent scoreEvent;
     [SerializeField] VoidEvent gamestartEvent; 
-    [SerializeField] GameObjectEvent respawnEvent; 
+    [SerializeField] GameObjectEvent respawnEvent;
+
+    [SerializeField] List<GameObject> mushrooms;
 
 
     public enum State
@@ -25,7 +29,8 @@ public class GameManager : Singleton<GameManager>
         TITLE,
         START_GAME,
         PLAY_GAME,
-        GAME_OVER
+        GAME_OVER,
+        GAME_WIN
     }
 
     public State state = State.TITLE;
@@ -59,12 +64,12 @@ public class GameManager : Singleton<GameManager>
                 titleUI.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
+                health.value = 100;
+                Lives = 5;
+                Timer = 120;
                 break;
             case State.START_GAME:
                 titleUI.SetActive(false);
-                Timer = 60;
-                Lives = 3;
-                health.value = 100;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
                 gamestartEvent.RaiseEvent();
@@ -76,6 +81,14 @@ public class GameManager : Singleton<GameManager>
                 if (Timer < 0) state = State.GAME_OVER;
                 break;
             case State.GAME_OVER:
+                goUI.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                break;
+            case State.GAME_WIN:
+                gwUI.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 break;
         }
 
@@ -91,11 +104,49 @@ public class GameManager : Singleton<GameManager>
 
     public void OnPlayerDead()
     {
+        Lives--;
+        if (Lives <= 0)
+        {
+            state = State.GAME_OVER;
+        }
+        else
+        {
+
         state = State.START_GAME;
+        }
     }
 
+    public void GOButton()
+    {
+        goUI.SetActive(false);
+        foreach (var mushroom in mushrooms)
+        {
+            mushroom.SetActive(true);
+        }
+        state = State.TITLE;
+    }
+
+    public void GWButton()
+    {
+        gwUI.SetActive(false);
+        foreach (var mushroom in mushrooms)
+        {
+            mushroom.SetActive(true);
+        }
+        state = State.TITLE;
+    }
+
+    public void OnWin()
+    {
+        state = State.GAME_WIN;
+    }
+    
     public void OnAddPoint(int points)
     {
+        //if (points > 0)
+        //{
+            
+        //}
         print(points);
-    }
+     }
 }

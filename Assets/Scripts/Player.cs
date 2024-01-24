@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] IntEvent scoreEvent = default;
     [SerializeField] VoidEvent gameStartEvent = default;
     [SerializeField] VoidEvent playerDeadEvent = default;
+    [SerializeField] VoidEvent onWinEvent = default;
 
     // Start is called before the first frame update
     private int score = 0;
@@ -38,12 +39,19 @@ public class Player : MonoBehaviour
 
     public void AddPoint(int points)
     {
+
         Score += points;
+
+        if (Score == 5)
+        {
+            onWinEvent.RaiseEvent();
+        }
     }
 
     private void OnStartGame()
     {
         characterController.enabled = true;
+        Score = 0;
     }
 
     public void Damage(float damage)

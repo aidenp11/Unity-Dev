@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -13,6 +14,7 @@ public class PhysicsCharacterController : MonoBehaviour
     [Header("Collision")]
     [SerializeField][Range(0, 5)] float rayLength = 1;
     [SerializeField] LayerMask groundLayerMask;
+    [SerializeField] LayerMask ceilingLayerMask;
 
     Rigidbody rb;
     Vector3 force = Vector3.zero;
@@ -21,7 +23,7 @@ public class PhysicsCharacterController : MonoBehaviour
        // Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
     }
-
+    
     void Update()
     {
         Vector3 direction = Vector3.zero;
@@ -33,9 +35,15 @@ public class PhysicsCharacterController : MonoBehaviour
         force = yrotation * direction * maxForce;
 
         Debug.DrawRay(transform.position, Vector3.down * rayLength, Color.red);
+        Debug.DrawRay(transform.position, Vector3.up * rayLength, Color.red);
         if (Input.GetButtonDown("Jump") && CheckGround())
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+
+        if (Input.GetButtonDown("Jump") && CheckCeiling())
+        {
+            rb.AddForce(Vector3.up * jumpForce * 3.5f, ForceMode.Impulse);
         }
     }
 
@@ -47,6 +55,11 @@ public class PhysicsCharacterController : MonoBehaviour
     private bool CheckGround()
     {
         return Physics.Raycast(transform.position, Vector3.down, rayLength, groundLayerMask);
+    }
+
+    private bool CheckCeiling()
+    {
+        return Physics.Raycast(transform.position, Vector3.up, rayLength, ceilingLayerMask);
     }
 
     public void Reset()

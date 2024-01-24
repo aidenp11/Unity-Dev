@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
-    [SerializeField] Animator animator;
+    [SerializeField] List<Animator> animator;
 
     private void OnTriggerEnter(Collider other)
     {
-        animator.SetTrigger("Start");
+        for (int i = 0; i < animator.Count; i++)
+        animator[i].SetTrigger("Start");
+
     }
 }

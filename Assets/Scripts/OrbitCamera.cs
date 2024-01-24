@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class OrbitCamera : MonoBehaviour
 {
@@ -26,5 +27,29 @@ public class OrbitCamera : MonoBehaviour
 
         transform.position = target.position + (rotation * Vector3.back * distance);
         transform.rotation = rotation;
+
+        if (pitch < 90)
+        {
+            Physics.gravity = new Vector2(0, -9.8f);
+            if (pitch < 0)
+            {
+                pitch = 0;
+            }
+
+
+        }
+        if (pitch > 90)
+        {
+            Physics.gravity = new Vector2(0, 9.8f);
+            if (pitch > 220)
+            {
+                pitch = 220;
+            }
+        }
+        if (pitch < 0)
+        {
+            pitch = 0;
+        }
+
     }
 }
