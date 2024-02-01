@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class KinematicController : MonoBehaviour
+public class KinematicController : MonoBehaviour, IDamagable
 {
     [SerializeField, Range(0, 40)] float speed = 1;
+
+    public float health = 100;
 
     void Update()
     {
@@ -15,5 +18,10 @@ public class KinematicController : MonoBehaviour
 
         Vector3 force = direction * speed * Time.deltaTime;
         transform.localPosition += force;
+    }
+
+    public void ApplyDamage(float damage)
+    {
+        health -= damage;
     }
 }
